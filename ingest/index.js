@@ -23,10 +23,10 @@ exports.ingestLogs = (data, context) => {
       FROM UNNEST(REGEXP_EXTRACT_ALL(url, r"%[0-9a-fA-F]{2}(?:%[0-9a-fA-F]{2})*|[^%]+")) y
       WITH OFFSET AS i 
     ));
-    INSERT INTO ${datasetName}.logs (hit_ts, id, ip, host, beacon, ref, ua, ts, uid, event, href, sel, data) SELECT
-      TIMESTAMP_MICROS(time_micros),
+    INSERT INTO ${datasetName}.logs (dt, id, ip, host, beacon, ref, ua, ts, uid, event, href, sel, data) SELECT
+      DATE(TIMESTAMP_MICROS(CAST(time_micros AS INT64))),
       s_request_id, c_ip, cs_host, cs_object, cs_referer, cs_user_agent,
-      TIMESTAMP_MILLIS(JSON_EXTRACT_SCALAR(data, "$.t")),
+      TIMESTAMP_MILLIS(CAST(JSON_EXTRACT_SCALAR(data, "$.t") AS INT64)),
       JSON_EXTRACT_SCALAR(data, "$.u"), JSON_EXTRACT_SCALAR(data, "$.e"),
       JSON_EXTRACT_SCALAR(data, "$.l"), JSON_EXTRACT_SCALAR(data, "$.s"), data
       FROM (
@@ -48,7 +48,7 @@ exports.ingestLogs = (data, context) => {
       },
       timePartitioning: {
         type: "DAY",
-        field: "hit_ts"
+        field: "dt"
       },
       useLegacySql: false
     })
