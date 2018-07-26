@@ -45,8 +45,17 @@ document.cookie =
   '; path=/; expires=' +
   expires.toUTCString();
 
-var attributes = {};
-var beaconUrl = '';
+if (!process.env.bucket) {
+  throw 'Undefined bigpapa bucket';
+}
+
+var attributes = window['bp_' + process.env.bucket] || {};
+
+var beaconUrl =
+  'https://storage.googleapis.com/' +
+  process.env.bucket +
+  '/' +
+  __filename.replace(/^.*([\w\d_]+)\.js$/, '$1.gif');
 
 var trackEvent = function(e) {
   var doc = e.target.ownerDocument,
@@ -67,32 +76,20 @@ var trackEvent = function(e) {
     tz: dt.getTimezoneOffset(),
     a: attributes
   };
-  if (!beaconUrl) {
-    if (console) console.log('trackEvent', data);
-  } else {
-    var img = new Image();
-    img.src = beaconUrl + '?' + encodeURIComponent(JSON.stringify(data));
-  }
+  var img = new Image();
+  img.src = beaconUrl + '?' + encodeURIComponent(JSON.stringify(data));
 };
 
-var trackEvent_ = debounced(trackEvent, 555);
+trackEvent({
+  type: 'pageview',
+  target: document.documentElement
+});
+
 var events = ['click', 'change', 'submit'];
 
-var init = function(beacon, attrs) {
-  beaconUrl = beacon;
-  if (typeof attrs === 'object') {
-    attributes = attrs;
-  }
-  trackEvent_({
-    type: 'pageview',
-    target: document.documentElement
-  });
-  for (var i = 0; i < events.length; i++) {
-    document.addEventListener(events[i], trackEvent);
-  }
-  document.addEventListener('scroll', trackEvent_);
-};
+for (var i = 0; i < events.length; i++) {
+  document.addEventListener(events[i], trackEvent);
+}
 
-init.trackEvent = trackEvent;
-
-window['bp'] = init;
+var trackEvent_ = debounced(trackEvent, 555);
+document.addEventListener('scroll', trackEvent_);
