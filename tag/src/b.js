@@ -58,7 +58,7 @@ var beaconUrl =
   __filename.replace(/^.*([\w\d_]+)\.js$/, '$1.gif');
 
 var trackEvent = function(e) {
-  var doc = e.target.ownerDocument,
+  var doc = e.target.ownerDocument || document,
     de = doc.documentElement,
     win = doc.defaultView;
   var dt = new Date();
