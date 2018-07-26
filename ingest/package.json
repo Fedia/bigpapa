@@ -1,0 +1,13 @@
+{
+  "name": "bigpapa-ingest",
+  "version": "0.0.1",
+  "description": "Ingest GCS access logs to BigQuery",
+  "engines": {
+    "node": "^8"
+  },
+  "author": "fedia@psih.ru",
+  "license": "MIT",
+  "dependencies": {
+    "@google-cloud/bigquery": "1.3.0"
+  }
+}
