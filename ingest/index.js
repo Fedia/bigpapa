@@ -46,10 +46,6 @@ exports.ingestLogs = (data, context) => {
           }
         }
       },
-      timePartitioning: {
-        type: "DAY",
-        field: "dt"
-      },
       useLegacySql: false
     })
     .then(res => {
