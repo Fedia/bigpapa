@@ -10,7 +10,7 @@ const logSchema = require("./schema.json");
 exports.ingestLogs = (data, context) => {
   const file = data;
   if (!file.name.match(/_usage_/)) return;
-  const datasetName = file.bucket.replace(/[^\w\d_]/g, "_");
+  const datasetName = file.bucket.replace('-logs', '');
   BigQuery.dataset(datasetName)
     .query({
       query: `
