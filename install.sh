@@ -4,7 +4,7 @@ BUCKET=$1
 set -e
 
 # try to create BigQuery dataset and GCS bucket first
-bq mk --dataset=$BUCKET
+bq mk --dataset $BUCKET
 gsutil mb gs://${BUCKET}
 
 # OK? then carry on
