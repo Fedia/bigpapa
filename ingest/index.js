@@ -11,9 +11,8 @@ exports.ingestLogs = (data, context) => {
   const file = data;
   if (!file.name.match(/_usage_/)) return true;
   const datasetName = file.bucket.replace('-logs', '');
-  return BigQuery.dataset(datasetName)
-    .query({
-      query: `
+  return BigQuery.query({
+    query: `
     CREATE TEMP FUNCTION URLDECODE(url STRING) AS ((
       SELECT STRING_AGG(
         IF(REGEXP_CONTAINS(y, r'^%[0-9a-fA-F]{2}'), 
@@ -31,34 +30,34 @@ exports.ingestLogs = (data, context) => {
       JSON_EXTRACT_SCALAR(data, "$.l") href, JSON_EXTRACT_SCALAR(data, "$.s") sel,
       data
       FROM (
-        SELECT *, URLDECODE(SUBSTR(cs_uri, STRPOS(cs_uri, "?")+1)) data FROM logsbucket
+        SELECT *, URLDECODE(SUBSTR(cs_uri, STRPOS(cs_uri, "?")+1)) data FROM '${datasetName}'.logsbucket
         WHERE cs_method="GET" AND sc_status=200 AND ENDS_WITH(cs_object, ".gif")
       );
     `,
-      tableDefinitions: {
-        logsbucket: {
-          sourceFormat: 'CSV',
-          csvOptions: {
-            skipLeadingRows: 1
-          },
-          sourceUris: [`gs://${file.bucket}/${file.name}`],
-          schema: {
-            fields: logSchema
-          }
+    tableDefinitions: {
+      logsbucket: {
+        sourceFormat: 'CSV',
+        csvOptions: {
+          skipLeadingRows: 1
+        },
+        sourceUris: [`gs://${file.bucket}/${file.name}`],
+        schema: {
+          fields: logSchema
         }
-      },
-      destinationTable: {
-        datasetId: datasetName,
-        tableId: 'logs'
-      },
-      createDisposition: 'CREATE_IF_NEEDED',
-      writeDisposition: 'WRITE_APPEND',
-      timePartitioning: {
-        type: 'DAY',
-        field: 'dt'
-      },
-      useLegacySql: false
-    })
+      }
+    },
+    destinationTable: {
+      datasetId: datasetName,
+      tableId: 'logs'
+    },
+    createDisposition: 'CREATE_IF_NEEDED',
+    writeDisposition: 'WRITE_APPEND',
+    timePartitioning: {
+      type: 'DAY',
+      field: 'dt'
+    },
+    useLegacySql: false
+  })
     .then(res => {
       console.log('Ingested', file.name);
     })
