@@ -23,6 +23,6 @@ gsutil logging set on -b gs://${BUCKET}-logs gs://${BUCKET}
 
 cd ../ingest
 bq mk --table --schema table-schema.json --time_partitioning_field dt ${BUCKET}.logs
-gcloud beta functions deploy ingestLogs --runtime nodejs8 --trigger-resource gs://${BUCKET}-logs --trigger-event google.storage.object.finalize
+gcloud beta functions deploy ${BUCKET}_ingestLogs --entry-point ingestLogs --runtime nodejs8 --trigger-resource gs://${BUCKET}-logs --trigger-event google.storage.object.finalize
 
 echo "Done!"
