@@ -1,0 +1,54 @@
+[
+  {
+    "name": "dt",
+    "type": "DATE"
+  },
+  {
+    "name": "id",
+    "type": "STRING"
+  },
+  {
+    "name": "ip",
+    "type": "STRING"
+  },
+  {
+    "name": "host",
+    "type": "STRING"
+  },
+  {
+    "name": "beacon",
+    "type": "STRING"
+  },
+  {
+    "name": "ref",
+    "type": "STRING"
+  },
+  {
+    "name": "ua",
+    "type": "STRING"
+  },
+  {
+    "name": "ts",
+    "type": "TIMESTAMP"
+  },
+  {
+    "name": "uid",
+    "type": "STRING"
+  },
+  {
+    "name": "event",
+    "type": "STRING"
+  },
+  {
+    "name": "href",
+    "type": "STRING"
+  },
+  {
+    "name": "sel",
+    "type": "STRING"
+  },
+  {
+    "name": "data",
+    "type": "STRING"
+  }
+]
