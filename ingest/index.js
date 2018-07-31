@@ -1,5 +1,5 @@
 const BigQuery = require('@google-cloud/bigquery')();
-const logSchema = require('./schema.json');
+const logSchema = require('./storage-schema.json');
 
 /**
  * Background Cloud Function to ingest logs
