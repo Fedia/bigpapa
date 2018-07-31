@@ -1,5 +1,5 @@
 #!/bin/bash
-BUCKET=$0
+BUCKET=$1
 
 set -e
 
