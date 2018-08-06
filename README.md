@@ -1,4 +1,4 @@
-# BigPapa
+# BigPapa Web Insights
 
 BigPapa glues Google Cloud Storage with BigQuery to provide an alternative to Google Analytics.
 
@@ -7,7 +7,7 @@ BigPapa glues Google Cloud Storage with BigQuery to provide an alternative to Go
 - Ad-blocking is less of an issue than for popular scripts (GA, Tag Manager)
 - No sampling and no event limits
 - Custom analytics with BigQuery + DataStudio for reporting
-- Serverless and scaleable cloud solution, but *you own* the data
+- Serverless scaleable cloud solution where *you own* the data
 
 ## Installation
 1. Create a billable project in [Google Cloud Console](https://console.cloud.google.com)
